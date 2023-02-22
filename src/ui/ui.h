@@ -55,9 +55,9 @@ extern lv_obj_t * ui_Panel4;
 extern lv_obj_t * ui_Paneldigits;
 extern lv_obj_t * ui_lblDigits;
 extern lv_obj_t * ui_DropdownDigits;
-extern lv_obj_t * ui_PanelIntTime;
-extern lv_obj_t * ui_lblIntTime;
-extern lv_obj_t * ui_DropdownIntTime;
+extern lv_obj_t * ui_Panel6;
+extern lv_obj_t * ui_lblDigits1;
+extern lv_obj_t * ui_DropdownDigits1;
 extern lv_obj_t * ui_Panel3;
 extern lv_obj_t * ui_lblFrequencyText5;
 extern lv_obj_t * ui_Switch2;
@@ -74,6 +74,8 @@ extern lv_obj_t * ui_Label1;
 
 
 
+LV_FONT_DECLARE(ui_font_Font1);
+LV_FONT_DECLARE(ui_font_Font2);
 
 
 void ui_init(void);
