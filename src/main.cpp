@@ -1,6 +1,7 @@
 #include <TFT_eSPI.h>
 #include <lvgl.h>
 #include "ui/ui.h" 
+#include "ui/ui_helpers.h"
 
 void touch_calibrate();
 void loop_calibrate();
@@ -119,11 +120,25 @@ void setup() {
   Serial1.println("Setup done");
 }
 
+unsigned long previousMillis = 0;
+
 void loop() {
 #ifdef USE_CALIBRATE
   loop_calibrate();
 #else
   lv_timer_handler(); /* let the GUI do its work */
+
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= 200UL) {
+    // save the last time you blinked the LED
+    previousMillis = currentMillis;
+
+    double val = 15.0 + rand() * 0.000000001;
+    char buffer[20];
+    snprintf(buffer, sizeof(buffer), "%12.9f", val);
+    _ui_label_set_property(ui_lblFrequency, _UI_LABEL_PROPERTY_TEXT, buffer);
+  }
+
   delay(5);
 #endif
 }

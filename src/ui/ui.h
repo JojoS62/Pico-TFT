@@ -1,5 +1,5 @@
 // SquareLine LVGL GENERATED FILE
-// EDITOR VERSION: SquareLine Studio 1.2.0
+// EDITOR VERSION: SquareLine Studio 1.2.1
 // LVGL VERSION: 8.3.4
 // PROJECT: SquareLine_Project
 
@@ -35,7 +35,11 @@ extern lv_obj_t * ui_lblFrequencyText3;
 extern lv_obj_t * ui_lblFrequencyUnit4;
 void ui_event_ButtonMenu(lv_event_t * e);
 extern lv_obj_t * ui_ButtonMenu;
+extern lv_obj_t * ui_Label5;
 extern lv_obj_t * ui_Label3;
+void ui_event_ButtonMenu3(lv_event_t * e);
+extern lv_obj_t * ui_ButtonMenu3;
+extern lv_obj_t * ui_Label7;
 extern lv_obj_t * ui_Screen2;
 extern lv_obj_t * ui_Panel4;
 extern lv_obj_t * ui_Panel5;
@@ -43,10 +47,20 @@ extern lv_obj_t * ui_lblFrequencyText4;
 extern lv_obj_t * ui_Dropdown2;
 extern lv_obj_t * ui_Panel3;
 extern lv_obj_t * ui_lblFrequencyText5;
-extern lv_obj_t * ui_Switch2;
+extern lv_obj_t * ui_Dropdown1;
+extern lv_obj_t * ui_Panel6;
+extern lv_obj_t * ui_lblFrequencyText6;
+extern lv_obj_t * ui_Switch1;
 extern lv_obj_t * ui_Label2;
 void ui_event_ButtonMenu1(lv_event_t * e);
 extern lv_obj_t * ui_ButtonMenu1;
+extern lv_obj_t * ui_Label4;
+extern lv_obj_t * ui_Screen3;
+extern lv_obj_t * ui_Chart2;
+void ui_event_ButtonMenu2(lv_event_t * e);
+extern lv_obj_t * ui_ButtonMenu2;
+extern lv_obj_t * ui_Label6;
+extern lv_obj_t * ui_Label8;
 
 
 
