@@ -54,6 +54,24 @@ void my_touchpad_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data) {
   }
 }
 
+void formatFreqText(double val, char *buffer, size_t bufSize)
+{
+    snprintf(buffer, bufSize, "%12.9f", val);
+    char* idx = strchr(buffer, '.');
+    if (idx) {
+      *idx = ',';
+      *(idx+12) = 0;
+      *(idx+11) = *(idx+9);
+      *(idx+10) = *(idx+8);
+      *(idx+9) = *(idx+7);
+      *(idx+8) = '.';
+      *(idx+7) = *(idx+5);
+      *(idx+6) = *(idx+4);
+      *(idx+5) = *(idx+3);
+      *(idx+4) = '.';
+    }
+}
+
 void setup() {
   Serial1.begin(115200); /* prepare for possible serial debug */
 
@@ -135,8 +153,8 @@ void loop() {
 
     double val = 15.0 + rand() * 0.000000001;
     char buffer[20];
-    snprintf(buffer, sizeof(buffer), "%12.9f", val);
-    _ui_label_set_property(ui_lblFrequency, _UI_LABEL_PROPERTY_TEXT, buffer);
+    formatFreqText(val, buffer, sizeof(buffer));
+    _ui_label_set_property(ui_lblFrequencyCurrent, _UI_LABEL_PROPERTY_TEXT, buffer);
   }
 
   delay(5);
