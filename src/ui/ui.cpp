@@ -139,6 +139,8 @@ void ui_ScreenMain_screen_init(void)
     lv_label_set_text(ui_lblFrequencyCurrent, "15,998.039.946 ");
     lv_obj_set_style_text_color(ui_lblFrequencyCurrent, lv_color_hex(0xF7F504), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_lblFrequencyCurrent, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_letter_space(ui_lblFrequencyCurrent, 3, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_line_space(ui_lblFrequencyCurrent, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_lblFrequencyCurrent, &lv_font_montserrat_30, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_left(ui_lblFrequencyCurrent, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_right(ui_lblFrequencyCurrent, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -175,12 +177,14 @@ void ui_ScreenMain_screen_init(void)
     lv_obj_set_width(ui_lblFrequency, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_lblFrequency, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_y(ui_lblFrequency, 0);
-    lv_obj_set_x(ui_lblFrequency, lv_pct(-15));
+    lv_obj_set_x(ui_lblFrequency, lv_pct(-12));
     lv_obj_set_align(ui_lblFrequency, LV_ALIGN_RIGHT_MID);
     lv_label_set_long_mode(ui_lblFrequency, LV_LABEL_LONG_CLIP);
     lv_label_set_text(ui_lblFrequency, "15,998.039.946");
     lv_obj_set_style_text_color(ui_lblFrequency, lv_color_hex(0x08C210), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_lblFrequency, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_letter_space(ui_lblFrequency, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_line_space(ui_lblFrequency, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_lblFrequency, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_lblFrequencyText = lv_label_create(ui_PanelFrequencyMean);
@@ -217,12 +221,14 @@ void ui_ScreenMain_screen_init(void)
     lv_obj_set_width(ui_lblFrequency1, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_lblFrequency1, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_y(ui_lblFrequency1, 0);
-    lv_obj_set_x(ui_lblFrequency1, lv_pct(-15));
+    lv_obj_set_x(ui_lblFrequency1, lv_pct(-12));
     lv_obj_set_align(ui_lblFrequency1, LV_ALIGN_RIGHT_MID);
     lv_label_set_long_mode(ui_lblFrequency1, LV_LABEL_LONG_CLIP);
     lv_label_set_text(ui_lblFrequency1, "15,998.039.946");
     lv_obj_set_style_text_color(ui_lblFrequency1, lv_color_hex(0x08C210), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_lblFrequency1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_letter_space(ui_lblFrequency1, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_line_space(ui_lblFrequency1, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_lblFrequency1, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_lblFrequencyText1 = lv_label_create(ui_PanelFrequencyMax);
@@ -259,12 +265,14 @@ void ui_ScreenMain_screen_init(void)
     lv_obj_set_width(ui_lblFrequency2, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_lblFrequency2, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_y(ui_lblFrequency2, 0);
-    lv_obj_set_x(ui_lblFrequency2, lv_pct(-15));
+    lv_obj_set_x(ui_lblFrequency2, lv_pct(-12));
     lv_obj_set_align(ui_lblFrequency2, LV_ALIGN_RIGHT_MID);
     lv_label_set_long_mode(ui_lblFrequency2, LV_LABEL_LONG_CLIP);
     lv_label_set_text(ui_lblFrequency2, "15,998.039.946");
     lv_obj_set_style_text_color(ui_lblFrequency2, lv_color_hex(0x08C210), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_lblFrequency2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_letter_space(ui_lblFrequency2, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_line_space(ui_lblFrequency2, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_lblFrequency2, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_lblFrequencyText2 = lv_label_create(ui_PanelFrequencyMin);
@@ -301,12 +309,14 @@ void ui_ScreenMain_screen_init(void)
     lv_obj_set_width(ui_lblFrequency3, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_lblFrequency3, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_y(ui_lblFrequency3, 0);
-    lv_obj_set_x(ui_lblFrequency3, lv_pct(-15));
+    lv_obj_set_x(ui_lblFrequency3, lv_pct(-12));
     lv_obj_set_align(ui_lblFrequency3, LV_ALIGN_RIGHT_MID);
     lv_label_set_long_mode(ui_lblFrequency3, LV_LABEL_LONG_CLIP);
     lv_label_set_text(ui_lblFrequency3, "15,998.039.946");
     lv_obj_set_style_text_color(ui_lblFrequency3, lv_color_hex(0x08C210), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_lblFrequency3, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_letter_space(ui_lblFrequency3, 1, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_line_space(ui_lblFrequency3, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui_lblFrequency3, &lv_font_montserrat_22, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_lblFrequencyText3 = lv_label_create(ui_PanelFrequencyStdDev);
