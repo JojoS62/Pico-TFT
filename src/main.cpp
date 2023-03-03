@@ -35,7 +35,7 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area,
 void my_touchpad_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data) {
   uint16_t touchX, touchY;
 
-  bool touched = tft.getTouch(&touchX, &touchY, 600);
+  bool touched = false; // tft.getTouch(&touchX, &touchY, 600);
 
   if (!touched) {
     data->state = LV_INDEV_STATE_REL;
@@ -107,7 +107,7 @@ void setup() {
    the actual data for your display can be acquired using
    the Generic -> Touch_calibrate example from the TFT_eSPI library*/
   uint16_t calData[5] = { 426, 3455, 348, 3431, 1 };
-  tft.setTouch(calData);
+  // tft.setTouch(calData);
 
   lv_disp_draw_buf_init(&draw_buf, buf, NULL, tft.width() * 20);
 
@@ -167,7 +167,7 @@ void loop_calibrate(void) {
   uint16_t x = 0, y = 0; // To store the touch coordinates
 
   // Pressed will be set true is there is a valid touch on the screen
-  bool pressed = tft.getTouch(&x, &y);
+  bool pressed = false; // tft.getTouch(&x, &y);
 
   // Draw a white spot at the detected coordinates
   if (pressed) {
@@ -199,7 +199,7 @@ void touch_calibrate()
   tft.setTextFont(1);
   tft.println();
 
-  tft.calibrateTouch(calData, TFT_MAGENTA, TFT_BLACK, 15);
+  // tft.calibrateTouch(calData, TFT_MAGENTA, TFT_BLACK, 15);
 
   Serial1.println(); Serial1.println();
   Serial1.println("// Use this calibration code in setup():");

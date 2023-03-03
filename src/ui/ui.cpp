@@ -411,7 +411,7 @@ void ui_ScreenSettings_screen_init(void)
     lv_obj_set_y(ui_lblDigits, 1);
     lv_obj_set_align(ui_lblDigits, LV_ALIGN_LEFT_MID);
     lv_label_set_long_mode(ui_lblDigits, LV_LABEL_LONG_CLIP);
-    lv_label_set_text(ui_lblDigits, "samples");
+    lv_label_set_text(ui_lblDigits, "digits");
     lv_obj_set_style_text_font(ui_lblDigits, &lv_font_montserrat_26, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_DropdownDigits = lv_dropdown_create(ui_Paneldigits);
