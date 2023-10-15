@@ -31,6 +31,39 @@ void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area,
   lv_disp_flush_ready(disp);
 }
 
+/*Get the currently being pressed key.  0 if no key is pressed*/
+static uint32_t keypad_get_key(void)
+{
+    static bool btnAOld = false;
+    static bool btnBOld = false;
+    static bool btnCOld = false;
+    bool btnA = digitalReadFast(7);
+    bool btnB = digitalReadFast(8);
+    bool btnC = digitalReadFast(9);
+
+    uint32_t key = 0;
+
+    if (btnA && !btnAOld) {
+      key = 1;
+        _ui_screen_change(ui_ScreenSettings, LV_SCR_LOAD_ANIM_NONE, 0, 0);
+    }
+    btnAOld = btnA;
+
+    if (btnB && !btnBOld) {
+      key = 5;
+        _ui_screen_change(ui_ScreenMain, LV_SCR_LOAD_ANIM_NONE, 0, 0);
+    }
+    btnBOld = btnB;
+
+    if (btnC && !btnCOld) {
+      key = 2;
+        _ui_screen_change(ui_ScreenGraph, LV_SCR_LOAD_ANIM_NONE, 0, 0);
+    }
+    btnCOld = btnC;
+
+    return key;
+}
+
 /*Read the touchpad*/
 void my_touchpad_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data) {
   uint16_t touchX, touchY;
@@ -52,6 +85,48 @@ void my_touchpad_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data) {
     Serial1.print("Data y ");
     Serial1.println(touchY);
   }
+}
+
+/*Read the control buttons */
+void my_buttons_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data)
+{
+    static uint32_t last_key = 0;
+
+    /*Get the current x and y coordinates*/
+    data->point.x = 0;
+    data->point.y = 0;
+
+    /*Get whether the a key is pressed and save the pressed key*/
+    uint32_t act_key = keypad_get_key();
+    if(act_key != 0) {
+        data->state = LV_INDEV_STATE_PR;
+
+        /*Translate the keys to LVGL control characters according to your key definitions*/
+        switch(act_key) {
+            case 1:
+                act_key = LV_KEY_NEXT;
+                break;
+            case 2:
+                act_key = LV_KEY_PREV;
+                break;
+            case 3:
+                act_key = LV_KEY_LEFT;
+                break;
+            case 4:
+                act_key = LV_KEY_RIGHT;
+                break;
+            case 5:
+                act_key = LV_KEY_ENTER;
+                break;
+        }
+
+        last_key = act_key;
+    }
+    else {
+        data->state = LV_INDEV_STATE_REL;
+    }
+
+    data->key = last_key;
 }
 
 void formatFreqText(double val, char *buffer, size_t bufSize)
@@ -121,12 +196,19 @@ void setup() {
   disp_drv.draw_buf = &draw_buf;
   lv_disp_drv_register(&disp_drv);
 
-  /*Initialize the (dummy) input device driver*/
-  static lv_indev_drv_t indev_drv;
-  lv_indev_drv_init(&indev_drv);
-  indev_drv.type = LV_INDEV_TYPE_POINTER;
-  indev_drv.read_cb = my_touchpad_read;
-  lv_indev_drv_register(&indev_drv);
+  /*Initialize the touch input device driver*/
+  static lv_indev_drv_t indev_drv_touch;
+  lv_indev_drv_init(&indev_drv_touch);
+  indev_drv_touch.type = LV_INDEV_TYPE_POINTER;
+  indev_drv_touch.read_cb = my_touchpad_read;
+  lv_indev_drv_register(&indev_drv_touch);
+
+  /*Initialize the buttons input device driver*/
+  static lv_indev_drv_t indev_drv_button;
+  lv_indev_drv_init(&indev_drv_button);
+  indev_drv_button.type = LV_INDEV_TYPE_KEYPAD;
+  indev_drv_button.read_cb = my_buttons_read;
+  lv_indev_drv_register(&indev_drv_button);
 
   /* Create simple label */
   // lv_obj_t *label = lv_label_create(lv_scr_act());
