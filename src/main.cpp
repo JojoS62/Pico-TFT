@@ -2,6 +2,7 @@
 #include <lvgl.h>
 #include "ui/ui.h" 
 #include "ui/ui_helpers.h"
+#include "testscreen.h"
 
 void touch_calibrate();
 void loop_calibrate();
@@ -68,7 +69,11 @@ static uint32_t keypad_get_key(void)
 void my_touchpad_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data) {
   uint16_t touchX, touchY;
 
-  bool touched = false; // tft.getTouch(&touchX, &touchY, 600);
+#ifdef USE_TOUCH
+  bool touched = tft.getTouch(&touchX, &touchY, 600);
+#else
+  bool touched = false;
+#endif
 
   if (!touched) {
     data->state = LV_INDEV_STATE_REL;
@@ -169,6 +174,8 @@ void setup() {
 
   Serial1.printf("TFT_WIDTH: %d  TFT_HEIGHT: %d\ntft.witdht: %d  tft.height: %d\n", TFT_WIDTH, TFT_HEIGHT, tft.width(), tft.height());
 
+  tft.fillScreen(TFT_BLACK);
+
 #ifdef USE_CALIBRATE
   tft.fillScreen(TFT_BLACK);
   tft.drawCentreString("Touch screen to test!",tft.width()/2, tft.height()/2, 2);
@@ -182,7 +189,9 @@ void setup() {
    the actual data for your display can be acquired using
    the Generic -> Touch_calibrate example from the TFT_eSPI library*/
   uint16_t calData[5] = { 426, 3455, 348, 3431, 1 };
-  // tft.setTouch(calData);
+#ifdef USE_TOUCH
+  tft.setTouch(calData);
+#endif
 
   lv_disp_draw_buf_init(&draw_buf, buf, NULL, tft.width() * 20);
 
@@ -203,24 +212,22 @@ void setup() {
   indev_drv_touch.read_cb = my_touchpad_read;
   lv_indev_drv_register(&indev_drv_touch);
 
-  /*Initialize the buttons input device driver*/
-  static lv_indev_drv_t indev_drv_button;
-  lv_indev_drv_init(&indev_drv_button);
-  indev_drv_button.type = LV_INDEV_TYPE_KEYPAD;
-  indev_drv_button.read_cb = my_buttons_read;
-  lv_indev_drv_register(&indev_drv_button);
+  // /*Initialize the buttons input device driver*/
+  // static lv_indev_drv_t indev_drv_button;
+  // lv_indev_drv_init(&indev_drv_button);
+  // indev_drv_button.type = LV_INDEV_TYPE_KEYPAD;
+  // indev_drv_button.read_cb = my_buttons_read;
+  // lv_indev_drv_register(&indev_drv_button);
 
-  /* Create simple label */
-  // lv_obj_t *label = lv_label_create(lv_scr_act());
-  // lv_label_set_text(label, LVGL_Arduino.c_str());
-  // lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
-  
-  ui_init();
+  testscreen_init();
+  // ui_init();
 
   Serial1.println("Setup done");
 }
 
 unsigned long previousMillis = 0;
+float speed = 0.0f;
+float diff = 0.1f;
 
 void loop() {
 #ifdef USE_CALIBRATE
@@ -229,14 +236,19 @@ void loop() {
   lv_timer_handler(); /* let the GUI do its work */
 
   unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis >= 200UL) {
+  if (currentMillis - previousMillis >= 50UL) {
     // save the last time you blinked the LED
     previousMillis = currentMillis;
 
-    double val = 15.0 + rand() * 0.000000001;
+    // float val = (float)rand() / RAND_MAX * 100.0f;
+    speed += diff;
+
+    if ((speed > 99.0f) || (speed < 0.1f))
+      diff *= -1.0f;
+
     char buffer[20];
-    formatFreqText(val, buffer, sizeof(buffer));
-    _ui_label_set_property(ui_lblFrequencyCurrent, _UI_LABEL_PROPERTY_TEXT, buffer);
+    snprintf(buffer, sizeof(buffer), "%4.1f", speed);
+    _ui_label_set_property(lbl_speed, _UI_LABEL_PROPERTY_TEXT, buffer);
   }
 
   delay(5);
