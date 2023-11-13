@@ -3,11 +3,16 @@
 #include "ui/ui.h" 
 #include "ui/ui_helpers.h"
 #include "testscreen.h"
+#include "screen_i2_eeprom.h"
+#include "Wire.h"
+
+Screen_i2c_eeprom screen_i2c_eeeprom;
+
+constexpr uint8_t eeprom_adr = 0xa0 / 2;
+uint8_t id_code[6];
 
 void touch_calibrate();
 void loop_calibrate();
-
-// tft.pushImageDMA(0, sel * DHEIGHT / 2, DWIDTH, DHEIGHT / 2, sprPtr[sel]);
 
 static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[TFT_HEIGHT * 20];
@@ -156,8 +161,7 @@ void setup() {
   Serial1.begin(115200); /* prepare for possible serial debug */
 
   String LVGL_Arduino = "Hello Arduino! ";
-  LVGL_Arduino += String('V') + lv_version_major() + "." + lv_version_minor() +
-                  "." + lv_version_patch();
+  LVGL_Arduino += String('V') + lv_version_major() + "." + lv_version_minor() + "." + lv_version_patch();
 
   Serial1.println(LVGL_Arduino);
   Serial1.println("I am LVGL_Arduino");
@@ -172,7 +176,7 @@ void setup() {
   tft.init(0);        /* TFT init */
   tft.setRotation(3); /* Landscape orientation, flipped */
 
-  Serial1.printf("TFT_WIDTH: %d  TFT_HEIGHT: %d\ntft.witdht: %d  tft.height: %d\n", TFT_WIDTH, TFT_HEIGHT, tft.width(), tft.height());
+  Serial1.printf("TFT_WIDTH: %d  TFT_HEIGHT: %d\ntft.witdht: %d  tft.height: %d\n\n", TFT_WIDTH, TFT_HEIGHT, tft.width(), tft.height());
 
   tft.fillScreen(TFT_BLACK);
 
@@ -212,15 +216,34 @@ void setup() {
   indev_drv_touch.read_cb = my_touchpad_read;
   lv_indev_drv_register(&indev_drv_touch);
 
-  // /*Initialize the buttons input device driver*/
-  // static lv_indev_drv_t indev_drv_button;
-  // lv_indev_drv_init(&indev_drv_button);
-  // indev_drv_button.type = LV_INDEV_TYPE_KEYPAD;
-  // indev_drv_button.read_cb = my_buttons_read;
-  // lv_indev_drv_register(&indev_drv_button);
+  /*Initialize the buttons input device driver*/
+  static lv_indev_drv_t indev_drv_button;
+  lv_indev_drv_init(&indev_drv_button);
+  indev_drv_button.type = LV_INDEV_TYPE_KEYPAD;
+  indev_drv_button.read_cb = my_buttons_read;
+  lv_indev_drv_register(&indev_drv_button);
 
-  testscreen_init();
+  // testscreen_init();
   // ui_init();
+  screen_i2c_eeeprom.build_screen();
+
+  Wire1.setSDA(18);
+  Wire1.setSCL(19);
+  Wire1.begin();
+
+  Wire1.beginTransmission(eeprom_adr);
+  Wire1.write(0xfa);
+  uint8_t ack = Wire1.endTransmission();
+
+  Wire1.requestFrom(eeprom_adr, 6);
+  if (Wire1.available()) {
+    int rc =  Wire1.readBytes(id_code, sizeof(id_code));
+  }
+
+  Serial1.printf("EEPROM read: ack: %02x  mfct: %02x  device: %02x  id:  %02x %02x %02x %02x\n", 
+    ack, id_code[0], id_code[1], id_code[2], id_code[3],  id_code[4], id_code[5]);
+
+  screen_i2c_eeeprom.set_id(id_code);
 
   Serial1.println("Setup done");
 }
@@ -240,15 +263,8 @@ void loop() {
     // save the last time you blinked the LED
     previousMillis = currentMillis;
 
-    // float val = (float)rand() / RAND_MAX * 100.0f;
-    speed += diff;
+    screen_i2c_eeeprom.update();
 
-    if ((speed > 99.0f) || (speed < 0.1f))
-      diff *= -1.0f;
-
-    char buffer[20];
-    snprintf(buffer, sizeof(buffer), "%4.1f", speed);
-    _ui_label_set_property(lbl_speed, _UI_LABEL_PROPERTY_TEXT, buffer);
   }
 
   delay(5);
