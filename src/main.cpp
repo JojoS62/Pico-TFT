@@ -245,6 +245,27 @@ void setup() {
 
   screen_i2c_eeeprom.set_id(id_code);
 
+  // read complete eeprom
+
+  Wire1.beginTransmission(eeprom_adr);    // set startaddress = 0
+  Wire1.write(0x000);
+  ack = Wire1.endTransmission();
+
+  for (int i=0; i<16; i++) {
+    uint8_t buffer[16];
+
+    Wire1.requestFrom(eeprom_adr, 16);
+    if (Wire1.available()) {
+      int rc =  Wire1.readBytes(buffer, sizeof(buffer));
+    }
+
+    Serial1.printf("%02x: ", i*16);
+    for (int n=0; n<16; n++) {
+      Serial1.printf("%02x ", buffer[n]);
+    }
+    Serial1.printf("\n");
+  }
+
   Serial1.println("Setup done");
 }
 
